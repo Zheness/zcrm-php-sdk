@@ -92,6 +92,18 @@ class ZohoOAuthPersistenceByFile implements ZohoOAuthPersistenceInterface
             $found = false;
             $i = - 1;
             foreach ($arr as $i => $eachObj) {
+                if (isset($eachObj->{' zcrmsdk\oauth\utility\ZohoOAuthTokens refreshToken'})) {
+                    $eachObj->setRefreshToken($eachObj->{' zcrmsdk\oauth\utility\ZohoOAuthTokens refreshToken'});
+                }
+                if (isset($eachObj->{' zcrmsdk\oauth\utility\ZohoOAuthTokens accessToken'})) {
+                    $eachObj->setAccessToken($eachObj->{' zcrmsdk\oauth\utility\ZohoOAuthTokens accessToken'});
+                }
+                if (isset($eachObj->{' zcrmsdk\oauth\utility\ZohoOAuthTokens expiryTime'})) {
+                    $eachObj->setExpiryTime($eachObj->{' zcrmsdk\oauth\utility\ZohoOAuthTokens expiryTime'});
+                }
+                if (isset($eachObj->{' zcrmsdk\oauth\utility\ZohoOAuthTokens userEmailId'})) {
+                    $eachObj->setUserEmailId($eachObj->{' zcrmsdk\oauth\utility\ZohoOAuthTokens userEmailId'});
+                }
                 if ($userEmailId === $eachObj->getUserEmailId()) {
                     $found = true;
                     break;
