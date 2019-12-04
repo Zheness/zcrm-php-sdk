@@ -47,6 +47,8 @@ class ZohoOAuthConstants
     const REFRESH_TOKEN = "refresh_token";
     
     const EXPIRES_IN = "expires_in";
+
+    const EXPIRES_IN_SEC = "expires_in_sec";
     
     const EXPIRIY_TIME = "expiry_time";
     
