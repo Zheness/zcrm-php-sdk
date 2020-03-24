@@ -11,19 +11,19 @@ use zcrmsdk\crm\utility\APIConstants;
 
 class TagAPIHandler extends APIHandler
 {
-    
+
     protected $module = null;
-    
+
     private function __construct($zcrmmodule)
     {
         $this->module = $zcrmmodule;
     }
-    
+
     public static function getInstance($zcrmmodule = null)
     {
         return new TagAPIHandler($zcrmmodule);
     }
-    
+
     public function getTags()
     {
         try {
@@ -48,7 +48,7 @@ class TagAPIHandler extends APIHandler
             throw $exception;
         }
     }
-    
+
     public function getTagCount($tagId)
     {
         try {
@@ -67,7 +67,7 @@ class TagAPIHandler extends APIHandler
             throw $exception;
         }
     }
-    
+
     public function createTags($tags)
     {
         if (sizeof($tags) > 50) {
@@ -113,7 +113,7 @@ class TagAPIHandler extends APIHandler
             throw $e;
         }
     }
-    
+
     public function updateTags($tags)
     {
         if (sizeof($tags) > 50) {
@@ -155,7 +155,7 @@ class TagAPIHandler extends APIHandler
             throw $e;
         }
     }
-    
+
     public function delete($tagId)
     {
         try {
@@ -170,7 +170,7 @@ class TagAPIHandler extends APIHandler
             throw $exception;
         }
     }
-    
+
     public function merge($tagId, $mergeId)
     {
         try {
@@ -198,14 +198,14 @@ class TagAPIHandler extends APIHandler
             throw $e;
         }
     }
-    
+
     public function update($tag)
     {
         try {
             $this->requestMethod = APIConstants::REQUEST_METHOD_PUT;
             $this->urlPath = "settings/tags/" . $tag->getId();
             $this->addParam("module", $tag->getModuleApiName());
-            
+
             $this->addHeader("Content-Type", "application/json");
             $tagJSON = array();
             $tagJSON["name"] = "" . $tag->getName();
@@ -227,8 +227,8 @@ class TagAPIHandler extends APIHandler
             throw $e;
         }
     }
-    
-    public function addTags($record, $tagNames)
+
+    public function addTags($record, $tagNames, $overwrite = false)
     {
         if (sizeof($tagNames) > 10) {
             throw new ZCRMException(APIConstants::API_MAX_RECORD_TAGS_MSG, APIConstants::RESPONSECODE_BAD_REQUEST);
@@ -242,6 +242,7 @@ class TagAPIHandler extends APIHandler
             $this->urlPath = $record->getModuleApiName() . "/" . $record->getEntityId() . "/actions/add_tags";
             // Fire Request
             $this->addParam("tag_names", $tagname);
+            $this->addParam("over_write", $overwrite ? 'true' : 'false');
             $responseInstance = APIRequest::getInstance($this)->getAPIResponse();
             $responseDataArray = $responseInstance->getResponseJSON()['data'];
             $responseData = $responseDataArray[0];
@@ -254,7 +255,7 @@ class TagAPIHandler extends APIHandler
             throw $e;
         }
     }
-    
+
     public function removeTags($record, $tagNames)
     {
         if (sizeof($tagNames) > 10) {
@@ -281,7 +282,7 @@ class TagAPIHandler extends APIHandler
             throw $e;
         }
     }
-    
+
     public function addTagsToRecords($recordId, $tagNames)
     {
         if (sizeof($tagNames) > 10) {
@@ -306,7 +307,7 @@ class TagAPIHandler extends APIHandler
             // Fire Request
             $bulkAPIResponse = APIRequest::getInstance($this)->getBulkAPIResponse();
             $addedTags = array();
-            
+
             $responses = $bulkAPIResponse->getEntityResponses();
             foreach ($responses as $entityResIns) {
                 if (APIConstants::STATUS_SUCCESS === $entityResIns->getStatus()) {
@@ -326,7 +327,7 @@ class TagAPIHandler extends APIHandler
             throw $e;
         }
     }
-    
+
     public function removeTagsFromRecords($recordId, $tagNames)
     {
         if (sizeof($tagNames) > 10) {
@@ -370,7 +371,7 @@ class TagAPIHandler extends APIHandler
             throw $e;
         }
     }
-    
+
     public function setTagProperties($tagInstance, $tagDetails)
     {
         foreach ($tagDetails as $key => $value) {
@@ -393,7 +394,7 @@ class TagAPIHandler extends APIHandler
             }
         }
     }
-    
+
     function getZCRMTagAsJSON($tag)
     {
         $recordJSON = array();
